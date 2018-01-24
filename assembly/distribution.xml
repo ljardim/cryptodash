@@ -17,7 +17,8 @@
                 <include>THIRD_PARTY_LICENCES</include>
                 <include>MAINTAINERS</include>
                 <include>CONTRIBUTING.md</include>
-                <include>config/*.xml</include>
+                <include>cryptodash.bat</include>
+                <include>config/log4j2.xml</include>
                 <include>config/application.properties</include>
             </includes>
         </fileSet>
@@ -33,7 +34,7 @@
             <directory>cryptodash-app/target</directory>
             <outputDirectory>libs</outputDirectory>
             <includes>
-                <include>cryptodash-app-*.jar</include>
+                <include>cryptodash-app.jar</include>
             </includes>
         </fileSet>
 

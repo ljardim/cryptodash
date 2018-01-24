@@ -25,7 +25,7 @@ package com.ljardim.cryptodash.cpapi.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -37,10 +37,10 @@ import java.util.List;
 public class Post {
 
     private long id;
-    private LocalDateTime created_at;
+    private Date created_at;
     private String domain;
     private String title;
-    private LocalDateTime published_at;
+    private Date published_at;
     private String slug;
     private String url;
 
@@ -56,11 +56,11 @@ public class Post {
         this.id = id;
     }
 
-    public LocalDateTime getCreated_at() {
+    public Date getCreated_at() {
         return created_at;
     }
 
-    public void setCreated_at(LocalDateTime created_at) {
+    public void setCreated_at(Date created_at) {
         this.created_at = created_at;
     }
 
@@ -80,11 +80,11 @@ public class Post {
         this.title = title;
     }
 
-    public LocalDateTime getPublished_at() {
+    public Date getPublished_at() {
         return published_at;
     }
 
-    public void setPublished_at(LocalDateTime published_at) {
+    public void setPublished_at(Date published_at) {
         this.published_at = published_at;
     }
 

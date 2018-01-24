@@ -24,8 +24,10 @@
 package com.ljardim.cryptodash.cmcapi;
 
 import com.ljardim.cryptodash.cmcapi.domain.Ticker;
-import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -38,12 +40,14 @@ import java.util.List;
  *
  * @author Luis Jardim
  */
-@ConfigurationProperties(prefix = "CryptoPanic")
+@Component
+@CacheConfig(cacheNames = {"CoinMarketCapCache"})
 public class CoinMarketCapClient implements CoinMarketCap {
 
     private static final String COIN_MARKET_CAP_BASE_URL = "https://api.coinmarketcap.com/v1/ticker/";
 
     @Override
+    @Cacheable
     public List<Ticker> retrieveTickerData() throws CoinMarketCapException {
         RestTemplate restTemplate = new RestTemplate();
 

@@ -77,6 +77,8 @@
 
     <properties>
         <spring-boot-starter.version>1.5.9.RELEASE</spring-boot-starter.version>
+        <caffeine.version>2.6.1</caffeine.version>
+        <jackson-datatype-jsr310.version>2.9.3</jackson-datatype-jsr310.version>
     </properties>
 
     <modules>
@@ -124,6 +126,21 @@
                 <optional>true</optional>
                 <version>${spring-boot-starter.version}</version>
             </dependency>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-cache</artifactId>
+                <version>${spring-boot-starter.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.ben-manes.caffeine</groupId>
+                <artifactId>caffeine</artifactId>
+                <version>${caffeine.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.fasterxml.jackson.datatype</groupId>
+                <artifactId>jackson-datatype-jsr310</artifactId>
+                <version>${jackson-datatype-jsr310.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -137,16 +154,6 @@
                     <configuration>
                         <source>1.8</source>
                         <target>1.8</target>
-                    </configuration>
-                </plugin>
-
-                <plugin>
-                    <artifactId>maven-assembly-plugin</artifactId>
-                    <version>3.1.0</version>
-                    <configuration>
-                        <descriptors>
-                            <descriptor>assembly/distribution.xml</descriptor>
-                        </descriptors>
                     </configuration>
                 </plugin>
                 <plugin>
@@ -163,6 +170,37 @@
                             <goals>
                                 <goal>repackage</goal>
                             </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+                <plugin>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-maven-plugin</artifactId>
+                    <version>1.5.9.RELEASE</version>
+                    <executions>
+                        <execution>
+                            <goals>
+                                <goal>repackage</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-assembly-plugin</artifactId>
+                    <configuration>
+                        <descriptors>
+                            <descriptor>assembly/distribution.xml</descriptor>
+                        </descriptors>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <phase>package</phase>
+                            <goals>
+                                <goal>single</goal>
+                            </goals>
+                            <configuration>
+                                <appendAssemblyId>false</appendAssemblyId>
+                            </configuration>
                         </execution>
                     </executions>
                 </plugin>

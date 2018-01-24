@@ -25,8 +25,12 @@ package com.ljardim.cryptodash.cpapi;
 
 import com.ljardim.cryptodash.cpapi.domain.CryptoPanicFilter;
 import com.ljardim.cryptodash.cpapi.domain.Posts;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -40,15 +44,19 @@ import java.util.stream.Collectors;
  *
  * @author Luis Jardim
  */
-@ConfigurationProperties(prefix = "CryptoPanic")
+@Component
+@CacheConfig(cacheNames = {"CryptoPanicCache"})
 public class CryptoPanicClient implements CryptoPanic {
+
+    private static final Logger LOG = LogManager.getLogger();
 
     private static final String CRYPTO_PANIC_BASE_URL = "https://cryptopanic.com/api/posts/";
 
-    @Value("${authToken}")
+    @Value("${CryptoPanic.authToken}")
     private String authToken;
 
     @Override
+    @Cacheable
     public Posts retrievePosts(EnumSet<CryptoPanicFilter> filters, List<String> currencies) throws CryptoPanicException {
         if (authToken == null || authToken.trim().isEmpty()) {
             throw new CryptoPanicException("Authentication token is not configured in the config/application.properties file");
@@ -71,7 +79,9 @@ public class CryptoPanicClient implements CryptoPanic {
         }
 
         try {
-            return restTemplate.getForObject(uriBuilder.toUriString(), Posts.class);
+            String url = uriBuilder.toUriString();
+            LOG.info("Retrieving posts using endpoint: [{}]", url);
+            return restTemplate.getForObject(url, Posts.class);
         } catch (RestClientException e) {
             throw new CryptoPanicException("Exception caught while trying to call CryptoPanic API", e);
         }
